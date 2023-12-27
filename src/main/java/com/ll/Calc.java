@@ -3,10 +3,19 @@ package com.ll;
 public class Calc {
   public static int run(String exp) {
     boolean needToMultiply = exp.contains("*");
-    boolean needToPlus = !needToMultiply;
+    boolean needToPlus = exp.contains("+");
+
+    boolean needToCompound = needToMultiply && needToPlus;
+
+    if (needToCompound) {
+      String[] bits = exp.split(" \\+ ");
+
+      return Integer.parseInt(bits[0]) + run(bits[1]);
+    }
 
     if (needToPlus) {
       exp = exp.replaceAll("\\- ", "\\+ \\-");
+
 
       String[] bits = exp.split(" \\+ ");
 
