@@ -1,9 +1,18 @@
 package com.ll; // cim.ll 패키지 안에 있음
 
 public class Calc { // Cals 클래스
+
+  public static boolean recursionDebug = false; // 내가 디버그 모드를 켜겠다 할때는 true로 변경
+
+  public static int runCallCount = 0;
   public static int run(String exp) { // run 메서드 만듦.
+    runCallCount++;
     exp = exp.trim(); // 빈 여백을 인지하는 trim 사용
     exp = stripOuterBracket(exp); //
+
+    if (recursionDebug) {
+      System.out.printf("exp(%d) : %s\n", runCallCount, exp);
+    }
 
     // 연산기호가 없으면 바로 리턴
     if (!exp.contains(" ")) return Integer.parseInt(exp); // 여백이 없으면 parseInt로 리턴
