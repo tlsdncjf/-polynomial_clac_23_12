@@ -14,7 +14,7 @@ public class Calc {
     boolean needToCompound = needToMultiply && needToPlus;
     boolean needToSplit = exp.contains("(") || exp.contains(")");
 
-    if (needToSplit) {  // (20 + 20) + 20
+    if (needToSplit) {
       int bracketCount = 0;
       int splitPointIndex = -1;
 
@@ -33,7 +33,9 @@ public class Calc {
       String firstExp = exp.substring(0, splitPointIndex + 1);
       String secondExp = exp.substring(splitPointIndex + 3);
 
-      return Calc.run(firstExp) + Calc.run(secondExp);
+      char operator = exp.charAt(splitPointIndex + 2);
+      exp = Calc.run(firstExp) + " " + operator + " " + Calc.run(secondExp);
+      return Calc.run(exp);
 
     } else if (needToCompound) {
       String[] bits = exp.split(" \\+ ");
