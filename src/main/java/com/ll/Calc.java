@@ -5,10 +5,16 @@ public class Calc { // Cals 클래스
   public static boolean recursionDebug = false; // 내가 디버그 모드를 켜겠다 할때는 true로 변경
 
   public static int runCallCount = 0;
+
   public static int run(String exp) { // run 메서드 만듦.
     runCallCount++;
     exp = exp.trim(); // 빈 여백을 인지하는 trim 사용
     exp = stripOuterBracket(exp); //
+
+    // 음수괄호 패턴이면, 기존에 갖고있던 해석 패턴과는 맞지 않으니 패턴을 변경
+    if (isNegativeCaseBracket(exp)) {
+      exp = exp.substring(1) + " * -1";
+    }
 
     if (recursionDebug) {
       System.out.printf("exp(%d) : %s\n", runCallCount, exp);
@@ -26,6 +32,7 @@ public class Calc { // Cals 클래스
 
       String firstExp = exp.substring(0, splitPointIndex); // String타입에 firstExp변수를 만들었다
       String secondExp = exp.substring(splitPointIndex + 1); // ''
+
 
       char operator = exp.charAt(splitPointIndex); // exp가 가리키고 있는 문자열의 splitPointIndex번째 순서를 나타낸다
 
@@ -55,6 +62,29 @@ public class Calc { // Cals 클래스
     throw new RuntimeException("처리할 수 있는 계산식이 아닙니다"); // 위에 식 아무것도 포함되지않으면 콘솔에 ()값이뜬다.
   }
 
+  private static boolean isNegativeCaseBracket(String exp) {
+    // -로 시작하는지
+    if (exp.startsWith("-(") == false) return false;
+
+    // 괄호로 감싸져 있는지
+    int bracketCount = 0;
+
+    for (int i = 0; i < exp.length(); i++) {
+      char c = exp.charAt(i);
+
+      if (c == '(') {
+        bracketCount++;
+      } else if (c == ')') {
+        bracketCount--;
+      }
+
+      if (bracketCount == 0) {
+        if (exp.length() - 1 == i) return true;
+      }
+    }
+    return false;
+  }
+  
   private static int findSplitPointIndexBy(String exp, char findChar) {
     int bracketCount = 0;
 
